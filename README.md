@@ -1,9 +1,9 @@
-﻿#Simple A.I Model made by NLTK and Scikit Learn
+﻿<h1>Simple A.I Model made by NLTK and Scikit Learn</h1>
 
-<h1>
+<h2>
   Requiring Scikit Learn and NLTK
   And other Library
-</h1>
+</h2>
 
 ```
 pip install scikit-learn
@@ -12,9 +12,9 @@ pip install wikipedia
 pip install beautifulsoup4
 ```
 
-<h1>
+<h2>
   You can add your new word in
-</h1>
+</h2>
 
 ```
 Data\Data.json
