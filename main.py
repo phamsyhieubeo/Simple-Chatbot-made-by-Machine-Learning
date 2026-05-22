@@ -89,8 +89,8 @@ def opening_app(target: str):
     target = target.lower()
 
     app_direct = {
-        "discord": "C:/Users/Admin/AppData/Local/Discord/Update.exe --processStart Discord.exe",
-        "steam": "C:/Program Files (x86)/Steam/steam.exe"
+        "discord": "Put your direction in",
+        "steam": "Put your direction in"
     }
 
     websites = {
