@@ -11,9 +11,6 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import joblib
 import json
 
-
-
-
 with open("Data/Data.json", "r", encoding="utf-8") as file:
     data = json.load(file)
 
