@@ -1,0 +1,225 @@
+{
+"prompts":[
+    "hello",
+    "hi",
+    "hey",
+    "good morning",
+    "good afternoon",
+    "good evening",
+    "hello bot",
+    "hi there",
+    "hey chatbot",
+    "nice to meet you",
+
+    "how are ya",
+    "how are you today",
+    "are you doing great today",
+    "how is your day mate",
+    "oi, how are ya",
+    "are you doing good today",
+    "how are you",
+
+    "bye",
+    "goodbye",
+    "see you later",
+    "talk to you later",
+    "exit",
+    "quit",
+    "I have to go",
+    "see you soon",
+    "catch you later",
+    "bye bye",
+
+    "what is your name",
+    "your name",
+    "who are you",
+    "what should I call you",
+    "tell me your name",
+    "are you a chatbot",
+    "what are you",
+    "introduce yourself",
+    "who am I talking to",
+    "do you have a name",
+
+    "help me",
+    "can you help me",
+    "I need help",
+    "what can you do",
+    "show me what you can do",
+    "how can you help",
+    "I need assistance",
+    "please help",
+    "support me",
+    "help please",
+
+    "I have homework",
+    "help me with school",
+    "school is hard",
+    "I have an assignment",
+    "I need to study",
+    "my exam is coming",
+    "I have a test tomorrow",
+    "help me with class work",
+    "I do not understand my lesson",
+    "I need help with homework",
+
+    "how should I study",
+    "give me study advice",
+    "how can I focus",
+    "how do I prepare for exam",
+    "how to study better",
+    "I cannot concentrate",
+    "I keep getting distracted",
+    "how do I revise",
+    "what is the best way to study",
+    "help me make a study plan",
+
+    "help me with python",
+    "I need python help",
+    "explain python code",
+    "how do I write python",
+    "what is a variable in python",
+    "teach me python",
+    "python error help",
+    "how to use loops in python",
+    "how to make a function in python",
+    "I am learning python",
+
+    "tell me a joke",
+    "make me laugh",
+    "say something funny",
+    "do you know a joke",
+    "give me a joke",
+    "I want a funny joke",
+    "say a joke",
+    "make a funny sentence",
+    "cheer me up",
+    "tell me something funny",
+
+    "what is the weather",
+    "is it raining today",
+    "will it be sunny",
+    "weather today",
+    "is it cold outside",
+    "is it hot today",
+    "do I need an umbrella",
+    "what is the temperature",
+    "tell me the weather",
+    "how is the weather today",
+
+    "thank you",
+    "thanks",
+    "thank you so much",
+    "thanks for helping",
+    "appreciate it",
+    "that helped me",
+    "you are helpful",
+    "thanks a lot",
+    "cheers",
+    "thank you bot"
+],
+
+"labels": [
+    "greeting", "greeting", "greeting", "greeting", "greeting",
+    "greeting", "greeting", "greeting", "greeting", "greeting",
+    
+    "s-talk", "s-talk", "s-talk", "s-talk", "s-talk", "s-talk", 
+    "s-talk", 
+
+    "goodbye", "goodbye", "goodbye", "goodbye", "goodbye",
+    "goodbye", "goodbye", "goodbye", "goodbye", "goodbye",
+
+    "name", "name", "name", "name", "name",
+    "name", "name", "name", "name", "name",
+
+    "help", "help", "help", "help", "help",
+    "help", "help", "help", "help", "help",
+
+    "school", "school", "school", "school", "school",
+    "school", "school", "school", "school", "school",
+
+    "study_advice", "study_advice", "study_advice", "study_advice", "study_advice",
+    "study_advice", "study_advice", "study_advice", "study_advice", "study_advice",
+
+    "python", "python", "python", "python", "python",
+    "python", "python", "python", "python", "python",
+
+    "joke", "joke", "joke", "joke", "joke",
+    "joke", "joke", "joke", "joke", "joke",
+
+    "weather", "weather", "weather", "weather", "weather",
+    "weather", "weather", "weather", "weather", "weather",
+
+    "thanks", "thanks", "thanks", "thanks", "thanks",
+    "thanks", "thanks", "thanks", "thanks", "thanks"
+
+],
+
+"responses": {
+    "greeting": [
+        "Hello! How can I help you?",
+        "Hi there!",
+        "Hey! What do you need help with?"
+    ],
+
+    "s-talk": [
+        "Yes, I am doing great!",
+        "I am feeling good today.",
+        "Hehe, thanks for asking! I am doing super great!"
+    ],
+
+    "goodbye": [
+        "Goodbye!",
+        "See you later!",
+        "Bye! Have a good day."
+    ],
+
+    "name": [
+        "I am Kayla chatbot.",
+        "You can call me Kayla.",
+        "I am a chatbot made with NLTK and scikit-learn."
+    ],
+
+    "help": [
+        "I can help with school, Python, study advice, jokes, and simple questions.",
+        "Tell me what you need help with.",
+        "I can classify your message and reply based on your intent."
+    ],
+
+    "school": [
+        "School can be hard, but breaking tasks into smaller steps helps.",
+        "Tell me what subject or homework you need help with.",
+        "Try focusing on one topic at a time."
+    ],
+
+    "study_advice": [
+        "Study in short sessions, take breaks, and revise regularly.",
+        "Try using active recall: close your notes and test yourself.",
+        "Make a small study plan and focus on one goal at a time."
+    ],
+
+    "python": [
+        "I can help explain Python code step by step.",
+        "Python is easier when you practise variables, loops, functions, and lists.",
+        "Send me your Python code, and I can help debug it."
+    ],
+
+    "joke": [
+        "Why did the computer go to school? To improve its bytes!",
+        "Why was the math book sad? Because it had too many problems.",
+        "Why do programmers prefer dark mode? Because light attracts bugs!"
+    ],
+
+    "weather": [
+        "I cannot check live weather yet, but you can add a weather API later.",
+        "This chatbot does not have real-time weather data yet.",
+        "For now, I can only recognise that you are asking about weather."
+    ],
+
+    "thanks": [
+        "You're welcome!",
+        "No problem.",
+        "Happy to help!"
+    ]
+}
+}
