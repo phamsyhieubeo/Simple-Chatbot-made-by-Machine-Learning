@@ -2,11 +2,14 @@
 
 <h1>
   Requiring Scikit Learn and NLTK
+  And other Library
 </h1>
 
 ```
 pip install scikit-learn
 pip install NLTK
+pip install wikipedia
+pip install beautifulsoup4
 ```
 
 <h1>
