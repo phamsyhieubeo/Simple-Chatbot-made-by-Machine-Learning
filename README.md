@@ -1,4 +1,4 @@
-﻿# Simple-Chatbot-made-by-Machine-Learning
+﻿#Simple A.I Model made by NLTK and Scikit Learn
 
 <h1>
   Requiring Scikit Learn and NLTK
