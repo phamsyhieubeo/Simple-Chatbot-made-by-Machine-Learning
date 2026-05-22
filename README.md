@@ -17,5 +17,5 @@ pip install NLTK
 Data\Data.json
 ```
 <p>
-And then train it again using the file name ```Training.py```
+And then train it again using the file name Training.py
 </p>
