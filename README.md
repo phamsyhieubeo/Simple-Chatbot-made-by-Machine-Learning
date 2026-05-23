@@ -1,20 +1,21 @@
-﻿<h1>Simple A.I Model made by NLTK and Scikit Learn</h1>
+# Simple-Chatbot-made-by-Machine-Learning
 
-<h2>
+<h1>
   Requiring Scikit Learn and NLTK
   And other Library
-</h2>
+</h1>
 
 ```
 pip install scikit-learn
 pip install NLTK
 pip install wikipedia
 pip install beautifulsoup4
+pip install pyspellchecker
 ```
 
-<h2>
+<h1>
   You can add your new word in
-</h2>
+</h1>
 
 ```
 Data\Data.json
