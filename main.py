@@ -12,7 +12,9 @@ import wikipedia
 import warnings
 from bs4 import GuessedAtParserWarning
 import time
+from spellchecker import SpellChecker
 
+spell = SpellChecker()
 warnings.filterwarnings("ignore", category=GuessedAtParserWarning)
 
 with open("Data\\Data.json", 'r') as f:
@@ -36,7 +38,7 @@ def preprocessor(text: str):
     cleaned_token = []
 
     for word in token:
-        if word.isalpha() and word not in stop_words:
+        if word.isalpha():
             word = stemmer.stem(word)
             cleaned_token.append(word)
 
@@ -44,148 +46,257 @@ def preprocessor(text: str):
 
 model = joblib.load("Model\\KaylaGPT.pkl")
 
-def ActionDetecter(user_input: str):
-    user = user_input.lower()
-    
-    open_action = ["run", "open", "running", "opening", "start", "starting", "launch", "launching", "opening", "opening", "execute", "executing"]
-    open_targets = {
-        "youtube music": "youtube music",
-        "youtube": "youtube",
-        "facebook": "facebook",
-        "browser": "browser",
-        "discord": "discord",
-        "steam": "steam",
-        "vscode": "vscode",
-        "visual studio code": "visual studio code"
-    }
-
-    clear_action = ["clear", "cls", "clear screen", "clearscreen"]
-    exit_action = ["exit", "quit", "close"]
-
-    for word in open_action:
-        if word in user:
-            for target, value in open_targets.items():
-                if target in user:
-                    return "open", value
-    
-    for word in clear_action:
-        if word in user:
-            return "clear", None
-        
-    for word in exit_action:
-        if word in user:
-            return "exit", None
-
-    return None, None
-    
-def clear_screen():
-    if platform.system() == "Windows":
-        subprocess.run("cls", shell=True)
-    else:
-        subprocess.run(["clear"])
+import subprocess
+import platform
+import webbrowser
+import wikipedia
+import time
 
 
-def opening_app(target: str):
-    target = target.lower()
+class ModelAction:
+    def __init__(self, data: dict):
+        self.data = data
 
-    app_direct = {
-        "discord": "Put your direction in",
-        "steam": "Put your direction in"
-    }
+        self.open_action = [
+            "run", "open", "running", "opening",
+            "start", "starting", "launch", "launching",
+            "execute", "executing"
+        ]
 
-    websites = {
-        "browser": "https://www.google.com",
-        "facebook": "https://www.facebook.com",
-        "youtube": "https://www.youtube.com",
-        "youtube music": "https://music.youtube.com"
-    }
+        self.open_targets = {
+            "youtube music": "youtube music",
+            "youtube": "youtube",
+            "facebook": "facebook",
+            "browser": "browser",
+            "discord": "discord",
+            "steam": "steam",
+            "vscode": "vscode",
+            "visual studio code": "visual studio code"
+        }
 
-    if target in app_direct:
+        self.clear_action = [
+            "clear", "cls", "clear screen", "clearscreen"
+        ]
+
+        self.exit_action = [
+            "exit", "quit", "close"
+        ]
+
+        self.app_direct = {
+            "discord": [
+                r"C:\Users\Admin\AppData\Local\Discord\Update.exe",
+                "--processStart",
+                "Discord.exe"
+            ],
+            "steam": r"C:\Program Files (x86)\Steam\steam.exe",
+            "vscode": "code",
+            "visual studio code": "code"
+        }
+
+        self.websites = {
+            "browser": "https://www.google.com",
+            "facebook": "https://www.facebook.com",
+            "youtube": "https://www.youtube.com",
+            "youtube music": "https://music.youtube.com"
+        }
+
+        self.question_patterns = [
+            "can you explain ",
+            "could you explain ",
+            "explain ",
+            "tell me about ",
+            "give me information about ",
+            "give me info about ",
+            "search for ",
+            "search ",
+            "research ",
+            "look up ",
+            "find information about ",
+            "what is a ",
+            "what is an ",
+            "what is the ",
+            "what is ",
+            "who is ",
+            "where is ",
+            "when was ",
+            "when is ",
+            "why is ",
+            "how does ",
+            "how do ",
+            "how to ",
+        ]
+
+    def spelling_correction(self, text: str):
+        words = text.lower().strip().split()
+        corrected_words = []
+
+        for word in words:
+            corrected = spell.correction(word)
+
+            if corrected is None:
+                corrected_words.append(word)
+            else:
+                corrected_words.append(corrected)
+
+        return " ".join(corrected_words)
+
+    def action_detector(self, user_input: str):
+        user = user_input.lower().strip()
+
+        for word in self.open_action:
+            if word in user:
+                for target, value in self.open_targets.items():
+                    if target in user:
+                        return "open", value
+
+        for word in self.clear_action:
+            if word in user:
+                return "clear", None
+
+        for word in self.exit_action:
+            if word in user:
+                return "exit", None
+
+        return None, None
+
+    def clear_screen(self):
+        if platform.system() == "Windows":
+            subprocess.run("cls", shell=True)
+        else:
+            subprocess.run(["clear"])
+
+    def opening_app(self, target: str):
+        target = target.lower().strip()
+
+        if target in self.websites:
+            try:
+                webbrowser.open(self.websites[target])
+                self.running_text(f"I am opening website {target} right now!")
+            except Exception as e:
+                self.running_text(f"Sorry, I couldn't open the website {target}. Error: {e}")
+            return
+
+        if target in self.app_direct:
+            try:
+                app = self.app_direct[target]
+
+                if isinstance(app, list):
+                    subprocess.Popen(app)
+                else:
+                    subprocess.Popen(app, shell=True)
+
+                self.running_text(f"I am opening {target} right now!")
+            except Exception as e:
+                self.running_text(f"Sorry, I couldn't open {target}. Error: {e}")
+            return
+
+        self.running_text(f"Sorry, I do not know how to open {target}.")
+
+    def action_handler(self, action: str, keyword: str | None):
+        if action == "open":
+            if keyword is None:
+                self.running_text("What app do you want me to open?")
+                return True
+
+            self.opening_app(keyword)
+            return True
+
+        elif action == "clear":
+            self.clear_screen()
+            return True
+
+        elif action == "exit":
+            self.running_text("Goodbye!")
+            return False
+
+        else:
+            self.running_text("Sorry, I didn't understand that command.")
+            return True
+
+    def search_wikipedia(self, query: str):
         try:
-            subprocess.Popen(r"{}".format(app_direct[target]))
-            running_text(f"I am open {target} right now!")
-            #print(r"{}".format(app_direct[target]))
-        except Exception as e:            
-            running_text(f"Sorry, I couldn't open {target}. Error: {e}")
+            summary = wikipedia.summary(query, sentences=2)
+            return summary
 
-    if target in websites:
-        try:
-            webbrowser.open(websites[target])
-            print(f"I am open Website name {target} right now!")
-        except Exception as e:
-            print(f"Sorry, I couldn't open the website {target}. Error: {e}")
+        except wikipedia.exceptions.DisambiguationError as e:
+            return f"This topic is too broad. Try one of these: {e.options[:5]}"
 
-def action_handler(action: str, keyword: str):
-    if action == "open":
-        opening_app(keyword)
-    elif action == "clear":
-        clear_screen()
-    elif action == "exit":
-        print("Goodbye!")
-        exit()
-    else:
-        print("Sorry, I didn't understand that command.")
+        except wikipedia.exceptions.PageError:
+            return "I could not find that page."
 
-def search_wikipedia(query: str):
-    summary = wikipedia.summary(query)
-    return summary
+        except Exception:
+            return "Not found."
 
-def researching(text: str):
-    text =  text.lower()
+    def researching(self, text: str):
+        text = text.lower().strip()
 
-    if text in Data['prompts']:
-        return None
+        prompts = [prompt.lower().strip() for prompt in self.data["prompts"]]
 
-    else:
-        if text.startswith("what is"):
-            querty = text.replace('what is ', "", 1).strip()
-            answer = search_wikipedia(querty)
-            return answer
+        blocked_questions = [
+            "what is your name",
+            "who are you",
+            "what are you"
+        ]
+
+        if text in prompts:
+            return None, False
         
-        elif text.startswith("who is"):
-            querty = text.replace('who is ', "", 1).strip()
-            answer = search_wikipedia(querty)
-            return answer
+        if text in blocked_questions:
+            return None, False
 
-    return None
+        for pattern in self.question_patterns:
+            if text.startswith(pattern):
+                query = text.replace(pattern, "", 1).strip()
+                return self.search_wikipedia(query), True
 
+        return None, False
 
-def running_text(text:str):
-    for char in str(text):
-            print(f"{char}", flush= True, end= "")
+    def running_text(self, text: str):
+        for char in str(text):
+            print(char, flush=True, end="")
             time.sleep(0.02)
-    print("\n") 
+        print()
 
+action_model = ModelAction(Data)
 print("Kayla: Hey I am Kayla GPT, I hope I can help you")
+
 while True:
     user = input("You >> ").lower().strip()
-    action, target = ActionDetecter(user)
+    user = action_model.spelling_correction(user)
+    action, target = action_model.action_detector(user)
+    research, statement = action_model.researching(user)
+
+    #print(statement)
+
+    # if corrected_user != user:
+    #     action_model.running_text(f"Kayla: What's {user}")
+    #     continue
+
     if action:
-        action_handler(action, target) #type: ignore
+        action_model.action_handler(action, target) #type: ignore
         continue
     
-    if user.startswith("what is") or user.startswith("who is"):
+    if statement:
         print("Kayla: Researching ", end= '\r', flush= True)
 
-        research = researching(user)
+        research, statement = action_model.researching(user)
 
-        print("." * 100, end= "\r", flush= True)
+        print(" " * 100, end= "\r", flush= True)
         
         if research is not None:
             print("Kayla: ", end="", flush=True)
 
-        for char in str(research):
-            print(char, end="", flush=True)
-            time.sleep(0.02)
-        
+        action_model.running_text(str(research))
+
+        print("\n")
         continue
 
     if user == "":
         continue
+
     else:
         prediction = model.predict([user])[0]
         
         res = rd.choice(Response[prediction])
         print("Kayla: ", end= "")
-        running_text(res)
-
+        action_model.running_text(res)
